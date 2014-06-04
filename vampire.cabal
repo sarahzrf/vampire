@@ -48,6 +48,26 @@ build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 cabal-version:       >=1.10
 
+library
+  exposed-modules:
+    Debug.Vampire
+    Debug.Vampire.Trace
+
+  other-modules:
+    Debug.Vampire.Data
+    Debug.Vampire.Visualize
+
+  build-depends:
+    base,
+    haskell-src-exts,
+    uniplate,
+    deepseq,
+    fgl,
+    mtl,
+    dlist,
+    graphviz
+
+  default-language:    Haskell2010
 
 executable vampire
   -- .hs or .lhs file containing the Main module.
