@@ -58,7 +58,7 @@ library
     Debug.Vampire.Visualize
 
   build-depends:
-    base,
+    base >=4.6 && <4.7,
     haskell-src-exts,
     uniplate,
     deepseq,
@@ -81,7 +81,7 @@ executable vampire
   
   -- Other library packages from which modules are imported.
   build-depends:
-    base,
+    base >=4.6 && <4.7,
     haskell-src-exts,
     uniplate,
     deepseq,
