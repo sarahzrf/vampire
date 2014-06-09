@@ -23,7 +23,7 @@ doRewrite src dest = do
 rewrite =
   liftA2 doRewrite
     (argument str $ metavar "SOURCE")
-    (argument str $ metavar "DEST" <> value "-")
+    (argument str $ metavar "DEST" <> value "-" <> showDefault)
 rewriteDesc = "Rewrite a Haskell source file to add Vampire tracing."
  
 vampire = subparser $

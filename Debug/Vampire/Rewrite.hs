@@ -6,8 +6,14 @@ import Data.Generics.Uniplate.Data (descend, descendBi)
 rewriteFile :: String -> Maybe String
 rewriteFile code =
   case parse code :: ParseResult Module of
-    ParseOk mod -> Just $ prettyPrint $ descendBi rewrite mod
+    ParseOk mod -> Just $ prettyPrint $ addHeader $ descendBi rewrite mod
     _           -> Nothing
+
+addHeader :: Module -> Module
+addHeader (Module loc name prag warn exports imports decls) =
+  Module loc name (implicit:prag) warn exports (trace:imports) decls
+    where implicit = LanguagePragma (SrcLoc {srcFilename = "<unknown>.hs", srcLine = 1, srcColumn = 1}) [Ident "ImplicitParams"]
+          trace    = ImportDecl {importLoc = SrcLoc {srcFilename = "<unknown>.hs", srcLine = 5, srcColumn = 1}, importModule = ModuleName "Debug.Vampire.Trace", importQualified = False, importSrc = False, importPkg = Nothing, importAs = Nothing, importSpecs = Nothing}
 
 -- TODO: replace ugly pasted literal with something more sensible
 rewrite :: Exp -> Exp
