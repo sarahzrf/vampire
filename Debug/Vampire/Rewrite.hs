@@ -1,4 +1,4 @@
-module Debug.Vampire.Rewrite (rewriteFile) where
+module Debug.Vampire.Rewrite (rewriteFile, wrapExp) where
 
 import Language.Haskell.Exts
 import Data.Generics.Uniplate.Data (descend, descendBi)
@@ -25,4 +25,12 @@ rewrite expr = AST for this:
       result = (let ?ctx = resultStruct in [splice expr in])
   in (log ?ctx result resultStruct) `seq` result
 -}
+
+wrapExp' :: String -> Exp -> Exp
+wrapExp' wrapper exp = App (Var (UnQual (Ident wrapper))) (Paren (Lambda (SrcLoc {srcFilename = "<unknown>.hs", srcLine = 1, srcColumn = 11}) [PWildCard] exp))
+
+wrapExp :: String -> String -> Maybe String
+wrapExp wrapper code = case parseExp code of
+  ParseOk exp -> Just $ prettyPrint $ wrapExp' wrapper exp
+  _           -> Nothing
 

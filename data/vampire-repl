@@ -1,0 +1,4 @@
+import Debug.Vampire
+:def vview maybe (putStrLn "could not parse input" >> return "") return . wrapExp "viewExpr"
+:def veval maybe (putStrLn "could not parse input" >> return "") return . wrapExp "valueFor"
+

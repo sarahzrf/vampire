@@ -1,6 +1,6 @@
 {-# LANGUAGE ImplicitParams, RankNTypes #-}
 
-module Debug.Vampire.Visualize (structFor, toGraph, viewExpr) where
+module Debug.Vampire.Analyze (structFor, valueFor, toGraph, viewExpr) where
 
 import Debug.Vampire.Data
 import Debug.Vampire.Trace
@@ -19,11 +19,14 @@ instance Labellable () where
 
 structFor :: (Show a, NFData a) => ((?vCtx::IORef ExprStruct') => () -> a) -> IO ExprStruct
 structFor d = do
-  let struct = (let ?vCtx = vNewExprStruct "toplevel" in d () `deepseq` ?vCtx)
-  struct' <- readIORef struct >>= resolve
-  return $ case children' struct' of
+  let struct' = (let ?vCtx = vNewExprStruct "toplevel" in d () `deepseq` ?vCtx)
+  struct <- readIORef struct' >>= resolve
+  return $ case children struct of
     full:_ -> full
     []     -> ExprStruct "" Nothing []
+
+valueFor :: (Show a, NFData a) => ((?vCtx::IORef ExprStruct') => () -> a) -> a
+valueFor d = let ?vCtx = vNewExprStruct "toplevel" in d ()
 
 labelFor :: ExprStruct -> String
 labelFor (ExprStruct expr (Just val) _) = expr ++ " = " ++ val
