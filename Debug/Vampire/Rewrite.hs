@@ -10,8 +10,8 @@ rewriteFile code =
     _           -> Nothing
 
 addHeader :: Module -> Module
-addHeader (Module loc name prag warn exports imports decls) =
-  Module loc name (implicit:prag) warn exports (trace:imports) decls
+addHeader (Module loc name prag warn _ imports decls) =
+  Module loc name (implicit:prag) warn Nothing (trace:imports) decls
     where implicit = LanguagePragma (SrcLoc {srcFilename = "<unknown>.hs", srcLine = 1, srcColumn = 1}) [Ident "ImplicitParams"]
           trace    = ImportDecl {importLoc = SrcLoc {srcFilename = "<unknown>.hs", srcLine = 5, srcColumn = 1}, importModule = ModuleName "Debug.Vampire.Trace", importQualified = False, importSrc = False, importPkg = Nothing, importAs = Nothing, importSpecs = Nothing}
 
